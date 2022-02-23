@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'fotografo' => [
+            'driver' => 'session',
+            'provider' => 'fotografos',
+        ],
     ],
 
     /*
@@ -62,7 +66,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Cliente::class,
+        ],
+
+        'fotografos' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Fotografo::class,
         ],
 
         // 'users' => [
@@ -88,6 +97,12 @@ return [
 
     'passwords' => [
         'users' => [
+            'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'fotografos' => [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
