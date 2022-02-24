@@ -5,15 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Avatar extends Model
+class Face extends Model
 {
     use HasFactory;
+
+    protected $table = "faces";
     protected $fillable = [
-        "id", "url", "face_id", "image_id", "cliente_id",
+        "id", "face_id", "image_id", "foto_id"
     ];
 
-    public function cliente()
+    public function foto()
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Foto::class);
     }
 }

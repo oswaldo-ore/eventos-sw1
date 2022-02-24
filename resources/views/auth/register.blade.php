@@ -11,7 +11,8 @@
                         @isset($url)
                             <form method="POST" action='{{ url("register/$url") }}' aria-label="{{ __('Register') }}">
                             @else
-                                <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
+                                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data"
+                                    aria-label="{{ __('Register') }}">
                                 @endisset
                                 <!--<form method="POST" action="{{ route('register') }}">-->
                                 @csrf
@@ -92,6 +93,26 @@
                                             name="password_confirmation" required autocomplete="new-password">
                                     </div>
                                 </div>
+                                @isset($url)
+                                @else
+                                    <div class="row mb-3">
+                                        <label for="avatar-form"
+                                            class="col-md-4 col-form-label text-md-end">{{ __('Foto perfil') }}</label>
+
+                                        <div class="col-md-6">
+                                            <input type="file" name="avatar"
+                                                class="form-control  @error('avatar') is-invalid @enderror" id="avatar"
+                                                accept="image/*">
+                                            @error('avatar')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endisset
+
+
 
                                 <div class="row mb-0">
                                     <div class="col-md-6 offset-md-4">

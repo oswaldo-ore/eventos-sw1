@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Avatar;
 use App\Models\Cliente;
 use App\Models\Fotografo;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Aws\Rekognition\RekognitionClient;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -50,11 +53,20 @@ class RegisterController extends Controller
     {
         return view('auth.register', ['url' => 'fotografo']);
     }
+    protected function validatorFotografo(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:clientes'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+    }
 
     protected function createFotografo(Request $request)
     {
-        $this->validator($request->all())->validate();
-        return Fotografo::create([
+        $this->validatorFotografo($request->all())->validate();
+        Fotografo::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
             'email' => $request->email,
@@ -77,6 +89,7 @@ class RegisterController extends Controller
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:clientes'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png']
         ]);
     }
 
@@ -88,11 +101,56 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Cliente::create([
+        $cliente = Cliente::create([
             'name' => $data['name'],
             'lastname' => $data['lastname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $img = $data['avatar'];
+        $path = Storage::disk('s3')->put('avatars/' . $cliente->id, $img);
+
+
+        $client = new RekognitionClient(
+            [
+                'region' => env('AWS_DEFAULT_REGION', 'us-west-2'),
+                'version' => 'latest'
+            ]
+        );
+        $split = explode("/", $path);
+        $result = $client->indexFaces([
+            'CollectionId' => 'avatar',
+            'DetectionAttributes' => [],
+            'ExternalImageId' => end($split),
+            "MaxFaces" => 1,
+            'Image' => [
+                'S3Object' => [
+                    'Bucket' => 'sw-evento',
+                    'Name' => $path,
+                ],
+            ],
+        ]);
+
+
+
+        foreach ($result["FaceRecords"] as $face) {
+            $avatar = new Avatar();
+            $avatar->face_id = $face["Face"]["FaceId"];
+            $avatar->image_id = $face["Face"]["ImageId"];
+            $avatar->url = $path;
+            $avatar->cliente_id = $cliente->id;
+            $avatar->save();
+        }
+
+
+        return $cliente;
+
+        /*return Cliente::create([
+            'name' => $data['name'],
+            'lastname' => $data['lastname'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);*/
     }
 }

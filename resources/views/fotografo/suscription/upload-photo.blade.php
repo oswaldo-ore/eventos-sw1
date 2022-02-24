@@ -41,7 +41,6 @@
                                 <input type="file" name="photos[]" class="form-control" id="photos[]" multiple
                                     accept="image/*">
                                 <label class="input-group-text" for="photos">upload</label>
-
                             </div>
                             <br>
                             <button class="brn btn-primary">Guardar</button>

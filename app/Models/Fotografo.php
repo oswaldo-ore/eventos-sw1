@@ -16,6 +16,11 @@ class Fotografo extends User
         return $this->belongsToMany(Evento::class, Suscripcion::class);
     }
 
+    public function avatars()
+    {
+        return $this->hasMany(Avatar::class);
+    }
+
     public function eventosFotos()
     {
         return $this->belongsToMany(Evento::class, Foto::class);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateFacesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('avatars', function (Blueprint $table) {
+        Schema::create('faces', function (Blueprint $table) {
             $table->id();
-            $table->string('url')->nullable();
             $table->string('face_id');
             $table->string('image_id');
-
-            $table->foreignId('cliente_id')->constrained('clientes');
+            $table->foreignId('foto_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('avatars');
+        Schema::dropIfExists('faces');
     }
-};
+}
