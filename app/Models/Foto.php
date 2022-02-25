@@ -19,4 +19,9 @@ class Foto extends Model
     {
         return  $this->hasMany(Face::class);
     }
+
+    public function evento()
+    {
+        return $this->belongsTo(Evento::class, 'evento_id', 'id');
+    }
 }

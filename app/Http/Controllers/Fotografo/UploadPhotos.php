@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Fotografo;
 
+use App\Events\EventoEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Avatar;
 use App\Models\Evento;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 class UploadPhotos extends Controller
 {
     public $aws;
+    public $endPoint;
 
     public function __construct()
     {
@@ -23,6 +25,7 @@ class UploadPhotos extends Controller
                 'version' => 'latest'
             ]
         );
+        $this->endPoint = "https://sw-evento.s3.us-west-2.amazonaws.com/";
     }
     public function index()
     {
@@ -49,7 +52,7 @@ class UploadPhotos extends Controller
             foreach ($request->file('photos') as $file) {
                 $fileName = $file->getClientOriginalName();
                 //$file->storeAs('evento/' . $evento->id, $fileName, 's3');
-                $path = Storage::disk('s3')->put('eventos/' . $evento->id, $file);
+                $path = Storage::disk('s3')->put('eventos/' . $evento->id, $file, "public");
                 $paths[] = $path;
             }
             $imageExternal = $this->saveFotos($paths, $evento);
@@ -60,6 +63,7 @@ class UploadPhotos extends Controller
                 $clientesId[] = $avatar->cliente->id;
             }
             $evento->asistenUsuarios()->syncWithoutDetaching($clientesId);
+            event(new EventoEvent($evento));
         }
 
         return back()->with('success', 'Data Your files has been successfully added');
@@ -76,7 +80,7 @@ class UploadPhotos extends Controller
             $facesImage = $result["faces"];
 
             $foto = new Foto();
-            $foto->url = $path;
+            $foto->url = $this->endPoint . $path;
             $foto->fotografo_id =  $fotografo->id;
             $foto->evento_id = $evento->id;
             $foto->save();

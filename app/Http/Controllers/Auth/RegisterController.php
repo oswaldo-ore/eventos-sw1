@@ -109,7 +109,8 @@ class RegisterController extends Controller
         ]);
 
         $img = $data['avatar'];
-        $path = Storage::disk('s3')->put('avatars/' . $cliente->id, $img);
+
+        $path = Storage::disk('s3')->put('avatars/' . $cliente->id, $img, 'public');
 
 
         $client = new RekognitionClient(

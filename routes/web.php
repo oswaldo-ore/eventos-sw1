@@ -34,10 +34,10 @@ Route::prefix('fotografo')->group(function () {
 });
 
 
-Route::get('/login/fotografo', [LoginController::class, 'showFotografoLoginForm']);
-Route::get('/register/fotografo', [RegisterController::class, 'showFotografoRegisterForm']);
-Route::post('/login/fotografo', [LoginController::class, 'fotografoLogin']);
-Route::post('/register/fotografo', [RegisterController::class, 'createFotografo']);
+Route::get('/login/fotografo', [LoginController::class, 'showFotografoLoginForm'])->name('login.fotografo');
+Route::get('/register/fotografo', [RegisterController::class, 'showFotografoRegisterForm'])->name('register.fotografo');
+Route::post('/login/fotografo', [LoginController::class, 'fotografoLogin'])->name('login.fotografo');
+Route::post('/register/fotografo', [RegisterController::class, 'createFotografo'])->name('register.fotografo');
 
 
 Route::group(['middleware' => 'auth:fotografo', "prefix" => 'fotografo'], function () {
@@ -59,3 +59,6 @@ Route::resource('evento', EventoController::class);
 Route::get('/evento/{evento}/postulantes', [EventoController::class, 'show'])->name('evento.postulantes');
 Route::get('/evento/{evento}/postulantes/{fotografo}', [EventoController::class, 'aceptarFotografo'])->name('evento.postulantes.aceptar');
 Route::get('/album', [AlbumController::class, "index"])->name("album.index");
+Route::get('/album/{evento}', [AlbumController::class, "photoEvento"])->name("album.photos");
+
+Route::get('/mark-notification/{evento}/notification/{id}', [AlbumController::class, "markAsNotification"])->name("mark.notification");

@@ -1,8 +1,10 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+// $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
+
+//@import "~@fortawesome/fontawesome-free/css/all.min.css";

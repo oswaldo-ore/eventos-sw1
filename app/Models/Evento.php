@@ -32,6 +32,11 @@ class Evento extends Model
         return $this->belongsToMany(Fotografo::class, Foto::class);
     }
 
+    public function fotos()
+    {
+        return $this->hasMany(Foto::class);
+    }
+
     public function asistenUsuarios()
     {
         return $this->belongsToMany(Cliente::class, EventoCliente::class);
