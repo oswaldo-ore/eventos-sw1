@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\Fotografo\EventoController as FotografoEventoController;
 use App\Http\Controllers\Fotografo\FotografoHome;
 use App\Http\Controllers\Fotografo\SubscriptionController;
+use App\Http\Controllers\Fotografo\UploadPhotos;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -49,8 +51,11 @@ Route::group(['middleware' => 'auth:fotografo', "prefix" => 'fotografo'], functi
     Route::get('/subscription', [SubscriptionController::class, 'index'])->name('fotografo.subscription');
 
     Route::get('/subscription/{evento}/uploadPhotoPage', [SubscriptionController::class, 'uploadPhotoPage'])->name('fotografo.subscription.upload-photo');
-    Route::post('/subscription/{evento}/savePhotos', [SubscriptionController::class, 'savePhotos'])->name('fotografo.subscription.save-photos');
+    Route::post('/upload-photos/{evento}/savePhotos', [UploadPhotos::class, 'savePhotos'])->name('fotografo.subscription.save-photos');
 });
 
 
 Route::resource('evento', EventoController::class);
+Route::get('/evento/{evento}/postulantes', [EventoController::class, 'show'])->name('evento.postulantes');
+Route::get('/evento/{evento}/postulantes/{fotografo}', [EventoController::class, 'aceptarFotografo'])->name('evento.postulantes.aceptar');
+Route::get('/album', [AlbumController::class, "index"])->name("album.index");

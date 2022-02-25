@@ -18,8 +18,13 @@
                             <li class="list-group-item">lng: {{ $evento->lon ? $evento->lat : 'no existe lng' }}</li>
                         </ul>
                         <br>
-                        <a href="{{ route('fotografo.evento.subscribe', $evento->id) }}"
-                            class="btn btn-primary">Suscribirse</a>
+                        @if (is_null($fotografo))
+                            <a href="{{ route('fotografo.evento.subscribe', $evento->id) }}"
+                                class="btn btn-primary">Suscribirse</a>
+                        @else
+                            <a class="btn btn-success disabled">Suscrito</a>
+                        @endif
+
                     </div>
                 </div>
             </div>

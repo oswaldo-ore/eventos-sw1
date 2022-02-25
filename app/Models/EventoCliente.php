@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Suscripcion extends Pivot
+class EventoCliente extends Pivot
 {
     use HasFactory;
 
-    protected $table = "suscripcions";
-    public $timestamps = true;
-
-    protected $fillable = ["id", "accepted", "fotografo_id", "evento_id"];
+    protected $table = "evento_clientes";
+    protected $fillable = ["id", "cliente_id", "evento_id"];
 }

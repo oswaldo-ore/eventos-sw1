@@ -21,4 +21,9 @@ class Cliente extends User
     {
         return $this->hasMany(Evento::class);
     }
+
+    public function asisteEventos()
+    {
+        return $this->belongsToMany(Evento::class, EventoCliente::class);
+    }
 }

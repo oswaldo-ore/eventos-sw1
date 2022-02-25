@@ -28,7 +28,10 @@
                                         <th scope="col">{{ $evento->description }}</th>
                                         <th scope="col">{{ $evento->location }}</th>
                                         <th scope="col">{{ $evento->date }}</th>
-                                        <th scope="col">opciones</th>
+                                        <th scope="col">
+                                            <a href="{{ route('evento.postulantes', $evento->id) }}"
+                                                class="btn btn-primary"> Postulantes </a>
+                                        </th>
                                     </tr>
                                 @endforeach
                             </tbody>

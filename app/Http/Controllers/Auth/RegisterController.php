@@ -139,6 +139,7 @@ class RegisterController extends Controller
             $avatar->face_id = $face["Face"]["FaceId"];
             $avatar->image_id = $face["Face"]["ImageId"];
             $avatar->url = $path;
+            $avatar->external_id = $face["Face"]["ExternalImageId"];
             $avatar->cliente_id = $cliente->id;
             $avatar->save();
         }

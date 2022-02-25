@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateEventoClientesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('avatars', function (Blueprint $table) {
+        Schema::create('evento_clientes', function (Blueprint $table) {
             $table->id();
-            $table->string('url')->nullable();
-            $table->string('face_id');
-            $table->string('image_id');
-            $table->string('external_id');
-            $table->foreignId('cliente_id')->constrained('clientes');
-            $table->softDeletes();
+            $table->foreignId("evento_id")->constrained("eventos");
+            $table->foreignId("cliente_id")->constrained("clientes");
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('avatars');
+        Schema::dropIfExists('evento_clientes');
     }
-};
+}

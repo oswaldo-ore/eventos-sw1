@@ -66,7 +66,9 @@ class EventoController extends Controller
 
     public function verDetalles(Evento $evento)
     {
-        return view('fotografo.evento.detalle', compact('evento'));
+        $fotografo = Auth::guard('fotografo')->user();
+        $fotografo = $evento->fotografos()->find($fotografo->id);
+        return view('fotografo.evento.detalle', compact('evento', 'fotografo'));
     }
     public function subscribe(Evento $evento)
     {
